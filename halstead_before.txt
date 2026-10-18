@@ -1,0 +1,26 @@
+main.py:
+    h1: 7
+    h2: 29
+    N1: 19
+    N2: 29
+    vocabulary: 36
+    length: 48
+    calculated_length: 160.53293331310283
+    volume: 248.15640006923098
+    difficulty: 3.5
+    effort: 868.5474002423084
+    time: 48.25263334679491
+    bugs: 0.082718800023077
+util.py:
+    h1: 0
+    h2: 0
+    N1: 0
+    N2: 0
+    vocabulary: 0
+    length: 0
+    calculated_length: 0
+    volume: 0
+    difficulty: 0
+    effort: 0
+    time: 0.0
+    bugs: 0.0

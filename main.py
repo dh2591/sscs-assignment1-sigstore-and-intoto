@@ -1,11 +1,18 @@
 import argparse
-import requests
-import json
 import base64
+import json
 from pathlib import Path
 
+import requests
+
+from merkle_proof import (
+    DefaultHasher,
+    compute_leaf_hash,
+    verify_consistency,
+    verify_inclusion,
+)
 from util import extract_public_key, verify_artifact_signature
-from merkle_proof import DefaultHasher, verify_consistency, verify_inclusion, compute_leaf_hash
+
 
 def get_log_entry(log_index, debug=False):
     # TODO: verify that log index value is sane and valid

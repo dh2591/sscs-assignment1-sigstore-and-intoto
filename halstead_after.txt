@@ -1,0 +1,26 @@
+main.py:
+    h1: 7
+    h2: 30
+    N1: 20
+    N2: 30
+    vocabulary: 37
+    length: 50
+    calculated_length: 166.8582023226588
+    volume: 260.4726682814475
+    difficulty: 3.5
+    effort: 911.6543389850663
+    time: 50.64746327694812
+    bugs: 0.0868242227604825
+merkle_proof.py:
+    h1: 12
+    h2: 48
+    N1: 35
+    N2: 68
+    vocabulary: 60
+    length: 103
+    calculated_length: 311.0977500432694
+    volume: 608.4097313476774
+    difficulty: 8.5
+    effort: 5171.482716455258
+    time: 287.3045953586254
+    bugs: 0.20280324378255912
