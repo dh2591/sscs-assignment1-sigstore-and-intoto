@@ -2,6 +2,7 @@ import argparse
 import requests
 import json
 import base64
+from pathlib import Path
 
 from util import extract_public_key, verify_artifact_signature
 from merkle_proof import DefaultHasher, verify_consistency, verify_inclusion, compute_leaf_hash
@@ -78,6 +79,12 @@ def inclusion(log_index, artifact_filepath, debug=False):
     if not artifact_filepath:
         raise ValueError("Artifact filepath is required")
 
+    # Check that the artifact file exists and is a regular file
+    artifact_path = Path(artifact_filepath)
+
+    if not artifact_path.is_file():
+        raise ValueError(f"Invalid artifact filepath: {artifact_filepath}")
+
     # Get the entry from Rekor
     entry = get_log_entry(log_index, debug)
 
@@ -147,11 +154,14 @@ def get_latest_checkpoint(debug=False):
     data = response.json()
 
     # Store the checkpoint information we need
-    checkpoint = {
-        "treeID": data["treeID"],
-        "treeSize": data["treeSize"],
-        "rootHash": data["rootHash"]
-    }
+    # checkpoint = {
+    #     "treeID": data["treeID"],
+    #     "treeSize": data["treeSize"],
+    #     "rootHash": data["rootHash"]
+    # } so this function i wrote only selects the three fields we need, but we can also keep all the checkpoint information returned by the API if we want to use it later.
+
+    # Keep all checkpoint information returned by the API
+    checkpoint = data
 
     # If debug mode is enabled, save the checkpoint to a file
     if debug:
