@@ -1,1 +1,29 @@
+# Python cache files
 __pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+.venv-1/
+venv/
+
+# Environment variables and secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Test and coverage files
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# macOS files
+.DS_Store
+
+# Build artifacts
+dist/
+build/
+*.egg-info/

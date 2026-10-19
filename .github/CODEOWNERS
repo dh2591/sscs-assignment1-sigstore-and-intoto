@@ -1,0 +1,8 @@
+# Default owner for all files in this repository
+* @dh2591
+
+# Owner of Python source code
+*.py @dh2591
+
+# Owner of GitHub configuration files
+.github/ @dh2591
