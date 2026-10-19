@@ -3,10 +3,60 @@ platform darwin -- Python 3.14.7, pytest-9.1.1, pluggy-1.7.0 -- /Users/dina/sscs
 cachedir: .pytest_cache
 rootdir: /Users/dina/sscs-assignment1-sigstore-and-intoto
 configfile: pyproject.toml
-collecting ... collected 3 items
+plugins: cov-7.1.0, platformdirs-4.13.5
+collecting ... collected 42 items
 
-tests/test_merkle_proof.py::test_decomp_incl_proof[0-1-expected0] PASSED [ 33%]
-tests/test_merkle_proof.py::test_decomp_incl_proof[3-8-expected1] PASSED [ 66%]
-tests/test_merkle_proof.py::test_compute_leaf_hash PASSED                [100%]
+tests/test_main.py::test_get_log_entry_invalid_index PASSED              [  2%]
+tests/test_main.py::test_get_log_entry_success PASSED                    [  4%]
+tests/test_main.py::test_get_log_entry_empty_response PASSED             [  7%]
+tests/test_main.py::test_get_verification_proof_success PASSED           [  9%]
+tests/test_main.py::test_get_verification_proof_missing PASSED           [ 11%]
+tests/test_main.py::test_get_latest_checkpoint PASSED                    [ 14%]
+tests/test_main.py::test_consistency_missing_checkpoint PASSED           [ 16%]
+tests/test_main.py::test_consistency_different_tree_ids PASSED           [ 19%]
+tests/test_main.py::test_consistency_invalid_tree_size PASSED            [ 21%]
+tests/test_main.py::test_inclusion_success PASSED                        [ 23%]
+tests/test_main.py::test_inclusion_missing_artifact PASSED               [ 26%]
+tests/test_main.py::test_inclusion_nonexistent_file PASSED               [ 28%]
+tests/test_main.py::test_inclusion_invalid_index PASSED                  [ 30%]
+tests/test_main.py::test_consistency_success PASSED                      [ 33%]
+tests/test_merkle_proof.py::test_decomp_incl_proof[0-1-expected0] PASSED [ 35%]
+tests/test_merkle_proof.py::test_decomp_incl_proof[3-8-expected1] PASSED [ 38%]
+tests/test_merkle_proof.py::test_compute_leaf_hash PASSED                [ 40%]
+tests/test_merkle_proof.py::test_hasher_size PASSED                      [ 42%]
+tests/test_merkle_proof.py::test_empty_root PASSED                       [ 45%]
+tests/test_merkle_proof.py::test_hash_leaf PASSED                        [ 47%]
+tests/test_merkle_proof.py::test_hash_children PASSED                    [ 50%]
+tests/test_merkle_proof.py::test_verify_match_success PASSED             [ 52%]
+tests/test_merkle_proof.py::test_verify_match_failure PASSED             [ 54%]
+tests/test_merkle_proof.py::test_inner_proof_size PASSED                 [ 57%]
+tests/test_merkle_proof.py::test_root_from_inclusion_proof PASSED        [ 59%]
+tests/test_merkle_proof.py::test_invalid_inclusion_index PASSED          [ 61%]
+tests/test_merkle_proof.py::test_verify_consistency_same_tree PASSED     [ 64%]
+tests/test_merkle_proof.py::test_verify_consistency_different_roots PASSED [ 66%]
+tests/test_merkle_proof.py::test_verify_consistency_invalid_tree_size PASSED [ 69%]
+tests/test_merkle_proof.py::test_verify_consistency_empty_tree PASSED    [ 71%]
+tests/test_merkle_proof.py::test_verify_inclusion_single_leaf PASSED     [ 73%]
+tests/test_merkle_proof.py::test_chain_inner_left PASSED                 [ 76%]
+tests/test_merkle_proof.py::test_chain_inner_right PASSED                [ 78%]
+tests/test_merkle_proof.py::test_chain_inner_right_only PASSED           [ 80%]
+tests/test_merkle_proof.py::test_chain_border_right PASSED               [ 83%]
+tests/test_merkle_proof.py::test_invalid_leaf_hash_size PASSED           [ 85%]
+tests/test_merkle_proof.py::test_verify_inclusion_debug PASSED           [ 88%]
+tests/test_util.py::test_extract_public_key PASSED                       [ 90%]
+tests/test_util.py::test_extract_public_key_invalid_certificate PASSED   [ 92%]
+tests/test_util.py::test_verify_artifact_signature_success PASSED        [ 95%]
+tests/test_util.py::test_verify_artifact_signature_invalid PASSED        [ 97%]
+tests/test_util.py::test_verify_artifact_signature_error PASSED          [100%]
 
-============================== 3 passed in 0.01s ===============================
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.14.7-final-0 _______________
+
+Name              Stmts   Miss  Cover   Missing
+-----------------------------------------------
+main.py             124     43    65%   38, 52, 69-70, 175-176, 218-219, 234-285, 288
+merkle_proof.py     118     24    80%   43, 49, 54, 56-80, 119, 130, 140
+util.py              21      0   100%
+-----------------------------------------------
+TOTAL               263     67    75%
+============================== 42 passed in 0.15s ==============================

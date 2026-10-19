@@ -1,0 +1,306 @@
+unformatted: File would be reformatted
+   --> assignment1-original/main.py:7:26
+    |
+6   | from util import extract_public_key, verify_artifact_signature
+    - from merkle_proof import DefaultHasher, verify_consistency, verify_inclusion, compute_leaf_hash
+7   + from merkle_proof import (
+8   +     DefaultHasher,
+9   +     verify_consistency,
+10  +     verify_inclusion,
+11  +     compute_leaf_hash,
+12  + )
+13  +
+14  |
+--------------------------------------------------------------------------------
+46  |
+47  +
+48  | def get_verification_proof(log_index, debug=False):
+--------------------------------------------------------------------------------
+72  |
+73  +
+74  | def inclusion(log_index, artifact_filepath, debug=False):
+--------------------------------------------------------------------------------
+80  |     # verify_inclusion(DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash)
+    -     
+81  +
+82  |     if not isinstance(log_index, int) or log_index < 0:
+--------------------------------------------------------------------------------
+93  |     # Decode it and convert the JSON into a Python dictionary.
+    -     body = json.loads(
+    -         base64.b64decode(entry["body"]).decode("utf-8")
+    -     )
+94  +     body = json.loads(base64.b64decode(entry["body"]).decode("utf-8"))
+95  |
+--------------------------------------------------------------------------------
+103 |     signature = base64.b64decode(signature_b64)
+    -     certificate = base64.b64decode(certificate_b64) 
+104 +     certificate = base64.b64decode(certificate_b64)
+105 |
+--------------------------------------------------------------------------------
+109 |     # Verify that the signature belongs to our artifact
+    -     verify_artifact_signature(
+    -         signature,
+    -         public_key,
+    -         artifact_filepath
+    -     )
+110 +     verify_artifact_signature(signature, public_key, artifact_filepath)
+111 |
+--------------------------------------------------------------------------------
+125 |     verify_inclusion(
+    -         DefaultHasher,
+    -         index,
+    -         tree_size,
+    -         leaf_hash,
+    -         hashes,
+    -         root_hash,
+    -         debug
+126 +         DefaultHasher, index, tree_size, leaf_hash, hashes, root_hash, debug
+127 |     )
+128 |
+129 |     print("Offline verification successful")
+130 |
+131 +
+132 | def get_latest_checkpoint(debug=False):
+--------------------------------------------------------------------------------
+149 |         "treeSize": data["treeSize"],
+    -         "rootHash": data["rootHash"]
+150 +         "rootHash": data["rootHash"],
+151 |     }
+--------------------------------------------------------------------------------
+159 |
+160 +
+161 | def consistency(prev_checkpoint, debug=False):
+    -     # TODO: 
+162 +     # TODO:
+163 |     # verify that prev checkpoint is not empty
+164 |     # get_latest_checkpoint()
+    -     
+165 +
+166 |     # Make sure an older checkpoint was provided
+--------------------------------------------------------------------------------
+189 |         "lastSize": new_size,
+    -         "treeID": prev_checkpoint["treeID"]
+190 +         "treeID": prev_checkpoint["treeID"],
+191 |     }
+--------------------------------------------------------------------------------
+208 |         prev_checkpoint["rootHash"],
+    -         latest_checkpoint["rootHash"]
+209 +         latest_checkpoint["rootHash"],
+210 |     )
+211 |
+212 |     print("Consistency verification successful")
+213 |
+214 +
+215 | def main():
+216 |     debug = False
+217 |     parser = argparse.ArgumentParser(description="Rekor Verifier")
+    -     parser.add_argument('-d', '--debug', help='Debug mode',
+    -                         required=False, action='store_true') # Default false
+    -     parser.add_argument('-c', '--checkpoint', help='Obtain latest checkpoint\
+    -                         from Rekor Server public instance',
+    -                         required=False, action='store_true')
+    -     parser.add_argument('--inclusion', help='Verify inclusion of an\
+218 +     parser.add_argument(
+219 +         "-d", "--debug", help="Debug mode", required=False, action="store_true"
+220 +     )  # Default false
+221 +     parser.add_argument(
+222 +         "-c",
+223 +         "--checkpoint",
+224 +         help="Obtain latest checkpoint\
+225 +                         from Rekor Server public instance",
+226 +         required=False,
+227 +         action="store_true",
+228 +     )
+229 +     parser.add_argument(
+230 +         "--inclusion",
+231 +         help="Verify inclusion of an\
+232 |                         entry in the Rekor Transparency Log using log index\
+233 |                         and artifact filename.\
+    -                         Usage: --inclusion 126574567',
+    -                         required=False, type=int)
+    -     parser.add_argument('--artifact', help='Artifact filepath for verifying\
+    -                         signature',
+    -                         required=False)
+    -     parser.add_argument('--consistency', help='Verify consistency of a given\
+    -                         checkpoint with the latest checkpoint.',
+    -                         action='store_true')
+    -     parser.add_argument('--tree-id', help='Tree ID for consistency proof',
+    -                         required=False)
+    -     parser.add_argument('--tree-size', help='Tree size for consistency proof',
+    -                         required=False, type=int)
+    -     parser.add_argument('--root-hash', help='Root hash for consistency proof',
+    -                         required=False)
+234 +                         Usage: --inclusion 126574567",
+235 +         required=False,
+236 +         type=int,
+237 +     )
+238 +     parser.add_argument(
+239 +         "--artifact",
+240 +         help="Artifact filepath for verifying\
+241 +                         signature",
+242 +         required=False,
+243 +     )
+244 +     parser.add_argument(
+245 +         "--consistency",
+246 +         help="Verify consistency of a given\
+247 +                         checkpoint with the latest checkpoint.",
+248 +         action="store_true",
+249 +     )
+250 +     parser.add_argument(
+251 +         "--tree-id", help="Tree ID for consistency proof", required=False
+252 +     )
+253 +     parser.add_argument(
+254 +         "--tree-size", help="Tree size for consistency proof", required=False, type=int
+255 +     )
+256 +     parser.add_argument(
+257 +         "--root-hash", help="Root hash for consistency proof", required=False
+258 +     )
+259 |     args = parser.parse_args()
+--------------------------------------------------------------------------------
+287 |
+288 +
+289 | if __name__ == "__main__":
+    |
+
+unformatted: File would be reformatted
+   --> assignment1-original/merkle_proof.py:9:1
+    |
+8   |
+9   +
+10  | class Hasher:
+--------------------------------------------------------------------------------
+34  |
+35  +
+36  | # DefaultHasher is a SHA256 based LogHasher
+37  | DefaultHasher = Hasher(hashlib.sha256)
+38  |
+39  +
+40  | def verify_consistency(hasher, size1, size2, proof, root1, root2):
+--------------------------------------------------------------------------------
+56  |         if bytearray_proof:
+    -             raise ValueError(f"expected empty bytearray_proof, but got {len(bytearray_proof)} components")
+57  +             raise ValueError(
+58  +                 f"expected empty bytearray_proof, but got {len(bytearray_proof)} components"
+59  +             )
+60  |         return
+--------------------------------------------------------------------------------
+73  |     if len(bytearray_proof) != start + inner + border:
+    -         raise ValueError(f"wrong bytearray_proof size {len(bytearray_proof)}, want {start + inner + border}")
+74  +         raise ValueError(
+75  +             f"wrong bytearray_proof size {len(bytearray_proof)}, want {start + inner + border}"
+76  +         )
+77  |
+--------------------------------------------------------------------------------
+88  |
+89  +
+90  | def verify_match(calculated, expected):
+91  |     if calculated != expected:
+92  |         raise RootMismatchError(expected, calculated)
+93  |
+94  +
+95  | def decomp_incl_proof(index, size):
+96  |     inner = inner_proof_size(index, size)
+    -     border = bin(index >> inner).count('1')
+97  +     border = bin(index >> inner).count("1")
+98  |     return inner, border
+99  |
+100 +
+101 | def inner_proof_size(index, size):
+102 |     return (index ^ (size - 1)).bit_length()
+103 |
+104 +
+105 | def chain_inner(hasher, seed, proof, index):
+--------------------------------------------------------------------------------
+112 |
+113 +
+114 | def chain_inner_right(hasher, seed, proof, index):
+--------------------------------------------------------------------------------
+119 |
+120 +
+121 | def chain_border_right(hasher, seed, proof):
+--------------------------------------------------------------------------------
+125 |
+126 +
+127 | class RootMismatchError(Exception):
+--------------------------------------------------------------------------------
+134 |
+135 +
+136 | def root_from_inclusion_proof(hasher, index, size, leaf_hash, proof):
+--------------------------------------------------------------------------------
+140 |     if len(leaf_hash) != hasher.size():
+    -         raise ValueError(f"leaf_hash has unexpected size {len(leaf_hash)}, want {hasher.size()}")
+141 +         raise ValueError(
+142 +             f"leaf_hash has unexpected size {len(leaf_hash)}, want {hasher.size()}"
+143 +         )
+144 |
+--------------------------------------------------------------------------------
+160 |     bytearray_leaf = bytes.fromhex(leaf_hash)
+    -     calc_root = root_from_inclusion_proof(hasher, index, size, bytearray_leaf, bytearray_proof)
+161 +     calc_root = root_from_inclusion_proof(
+162 +         hasher, index, size, bytearray_leaf, bytearray_proof
+163 +     )
+164 |     verify_match(calc_root, bytearray_root)
+--------------------------------------------------------------------------------
+168 |
+169 +
+170 | # requires entry["body"] output for a log entry
+    |
+
+unformatted: File would be reformatted
+  --> assignment1-original/util.py:13:1
+   |
+12 | def extract_public_key(cert):
+   - # read the certificate
+   - #    with open("cert.pem", "rb") as cert_file:
+   - #        cert_data = cert_file.read()
+13 +     # read the certificate
+14 +     #    with open("cert.pem", "rb") as cert_file:
+15 +     #        cert_data = cert_file.read()
+16 |
+   - # load the certificate
+17 +     # load the certificate
+18 |     certificate = x509.load_pem_x509_certificate(cert, default_backend())
+19 |
+   - # extract the public key
+20 +     # extract the public key
+21 |     public_key = certificate.public_key()
+22 |
+   - # save the public key to a PEM file
+   - #    with open("cert_public.pem", "wb") as pub_key_file:
+   - #        pub_key_file.write(public_key.public_bytes(
+   - #            encoding=serialization.Encoding.PEM,
+   - #            format=serialization.PublicFormat.SubjectPublicKeyInfo
+   - #        ))
+23 +     # save the public key to a PEM file
+24 +     #    with open("cert_public.pem", "wb") as pub_key_file:
+25 +     #        pub_key_file.write(public_key.public_bytes(
+26 +     #            encoding=serialization.Encoding.PEM,
+27 +     #            format=serialization.PublicFormat.SubjectPublicKeyInfo
+28 +     #        ))
+29 |     pem_public_key = public_key.public_bytes(
+30 |         encoding=serialization.Encoding.PEM,
+   -         format=serialization.PublicFormat.SubjectPublicKeyInfo
+31 +         format=serialization.PublicFormat.SubjectPublicKeyInfo,
+32 |     )
+33 |
+34 |     return pem_public_key
+35 |
+36 +
+37 | def verify_artifact_signature(signature, public_key, artifact_filename):
+--------------------------------------------------------------------------------
+41 |
+   -         # load the signature
+42 +     # load the signature
+43 |     #    with open("hello.sig", "rb") as sig_file:
+--------------------------------------------------------------------------------
+52 |     try:
+   -         public_key.verify(
+   -             signature,
+   -             data,
+   -             ec.ECDSA(hashes.SHA256())
+   -         )
+53 +         public_key.verify(signature, data, ec.ECDSA(hashes.SHA256()))
+54 |     except InvalidSignature as e:
+   |
+
+3 files would be reformatted

@@ -1,18 +1,17 @@
 I001 [*] Import block is un-sorted or un-formatted
-  --> main.py:1:1
-   |
- 1 | / import argparse
- 2 | | import requests
- 3 | | import json
- 4 | | import base64
- 5 | | from pathlib import Path
- 6 | |
- 7 | | from util import extract_public_key, verify_artifact_signature
- 8 | | from merkle_proof import DefaultHasher, verify_consistency, verify_inclusion, compute_leaf_hash
-   | |_______________________________________________________________________________________________^
- 9 |
-10 |   def get_log_entry(log_index, debug=False):
-   |
+ --> assignment1-original/main.py:1:1
+  |
+1 | / import argparse
+2 | | import requests
+3 | | import json
+4 | | import base64
+5 | |
+6 | | from util import extract_public_key, verify_artifact_signature
+7 | | from merkle_proof import DefaultHasher, verify_consistency, verify_inclusion, compute_leaf_hash
+  | |_______________________________________________________________________________________________^
+8 |
+9 |   def get_log_entry(log_index, debug=False):
+  |
 help: Organize imports
    |
 1  | import argparse
@@ -20,25 +19,24 @@ help: Organize imports
 2  + import base64
 3  | import json
    - import base64
-4  | from pathlib import Path
-5  |
-6  + import requests
-7  +
-8  + from merkle_proof import (
-9  +     DefaultHasher,
-10 +     compute_leaf_hash,
-11 +     verify_consistency,
-12 +     verify_inclusion,
-13 + )
-14 | from util import extract_public_key, verify_artifact_signature
+4  |
+5  + import requests
+6  +
+7  + from merkle_proof import (
+8  +     DefaultHasher,
+9  +     compute_leaf_hash,
+10 +     verify_consistency,
+11 +     verify_inclusion,
+12 + )
+13 | from util import extract_public_key, verify_artifact_signature
    - from merkle_proof import DefaultHasher, verify_consistency, verify_inclusion, compute_leaf_hash
-15 |
-16 +
-17 | def get_log_entry(log_index, debug=False):
+14 |
+15 +
+16 | def get_log_entry(log_index, debug=False):
    |
 
 I001 [*] Import block is un-sorted or un-formatted
- --> merkle_proof.py:1:1
+ --> assignment1-original/merkle_proof.py:1:1
   |
 1 | / import hashlib
 2 | | import binascii
@@ -58,7 +56,7 @@ help: Organize imports
   |
 
 FURB161 Use of `bin(index >> inner).count('1')`
-  --> merkle_proof.py:88:14
+  --> assignment1-original/merkle_proof.py:88:14
    |
 86 | def decomp_incl_proof(index, size):
 87 |     inner = inner_proof_size(index, size)
@@ -76,7 +74,7 @@ help: Replace with `(index >> inner).bit_count()`
 note: This is an unsafe fix and may change runtime behavior
 
 I001 [*] Import block is un-sorted or un-formatted
- --> util.py:1:1
+ --> assignment1-original/util.py:1:1
   |
 1 | / from cryptography import x509
 2 | | from cryptography.hazmat.backends import default_backend
@@ -103,7 +101,7 @@ help: Organize imports
   |
 
 F841 [*] Local variable `e` is assigned to but never used
-  --> util.py:57:32
+  --> assignment1-original/util.py:57:32
    |
 55 |             ec.ECDSA(hashes.SHA256())
 56 |         )
@@ -121,7 +119,7 @@ help: Remove assignment to unused variable `e`
    |
 
 BLE001 Do not catch blind exception: `Exception`
-  --> util.py:59:12
+  --> assignment1-original/util.py:59:12
    |
 57 |     except InvalidSignature as e:
 58 |         print("Signature is invalid")
