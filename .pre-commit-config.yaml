@@ -1,0 +1,19 @@
+repos:
+  - repo: local
+    hooks:
+      - id: trufflehog
+        name: TruffleHog Secret Scan
+        entry: trufflehog filesystem . --exclude-paths=.trufflehog-exclude.txt --results=verified,unverified,unknown --fail --no-update
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: trufflehog-latest-commit
+        name: TruffleHog Latest Commit Scan
+        entry: trufflehog git file://. --since-commit HEAD~1 --max-depth 1 --results=verified,unverified,unknown --fail --no-update
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [manual]
+
+
