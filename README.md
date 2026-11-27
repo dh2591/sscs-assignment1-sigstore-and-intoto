@@ -32,18 +32,18 @@ This project is based on starter code provided for Assignment 1. It implements f
 
 ## Usage
 
-The program is run through `main.py`.
+The program is run through the `rekor_monitor` Python package.
 
 To view the available command-line options:
 
 ```bash
-poetry run python main.py --help
+poetry run python -m rekor_monitor.main --help
 ```
 
 To request verification of a Rekor inclusion proof:
 
 ```bash
-poetry run python main.py --inclusion 2959795689 --artifact artifact.md
+poetry run python -m rekor_monitor.main --inclusion 2959795689 --artifact artifact.md
 ```
 
 Replace the example log index and artifact path with the values you want to verify.
@@ -57,19 +57,19 @@ This project uses Poetry for dependency management.
 Run Ruff to check coding style:
 
 ```bash
-poetry run ruff check main.py merkle_proof.py util.py tests/
+poetry run ruff check rekor_monitor/ tests/
 ```
 
 Run mypy for type checking:
 
 ```bash
-poetry run mypy main.py merkle_proof.py util.py tests/
+poetry run mypy rekor_monitor/ tests/
 ```
 
 Run Bandit for security analysis:
 
 ```bash
-poetry run bandit main.py merkle_proof.py util.py
+poetry run bandit -r rekor_monitor/
 ```
 
 ## Testing

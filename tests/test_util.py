@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 import pytest
 from cryptography.exceptions import InvalidSignature
 
-from util import extract_public_key, verify_artifact_signature
+from rekor_monitor.util import extract_public_key, verify_artifact_signature
 
 
 def test_extract_public_key():
@@ -15,7 +15,7 @@ def test_extract_public_key():
     fake_certificate.public_key.return_value = fake_public_key
 
     with patch(
-        "util.x509.load_pem_x509_certificate",
+        "rekor_monitor.util.x509.load_pem_x509_certificate",
         return_value=fake_certificate
     ):
         result = extract_public_key(b"fake-certificate")
@@ -37,7 +37,7 @@ def test_verify_artifact_signature_success(tmp_path):
     fake_public_key = Mock()
 
     with patch(
-        "util.load_pem_public_key",
+        "rekor_monitor.util.load_pem_public_key",
         return_value=fake_public_key
     ):
         verify_artifact_signature(
@@ -60,7 +60,7 @@ def test_verify_artifact_signature_invalid(tmp_path):
     fake_public_key.verify.side_effect = InvalidSignature()
 
     with patch(
-        "util.load_pem_public_key",
+        "rekor_monitor.util.load_pem_public_key",
         return_value=fake_public_key
     ):
         # An invalid signature should stop verification.
@@ -82,7 +82,7 @@ def test_verify_artifact_signature_error(tmp_path, capsys):
     fake_public_key.verify.side_effect = RuntimeError("Test error")
 
     with patch(
-        "util.load_pem_public_key",
+        "rekor_monitor.util.load_pem_public_key",
         return_value=fake_public_key
     ):
         verify_artifact_signature(

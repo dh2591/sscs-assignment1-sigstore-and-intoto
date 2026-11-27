@@ -1,17 +1,25 @@
+
 [project]
-name = "sscs-assignment1-sigstore-and-intoto"
+name = "python-rekor-monitor-dh2591"
 version = "0.1.0"
-description = "Software Supply Chain Security assignment using Sigstore and in-toto"
+description = "A Python tool for monitoring and verifying Sigstore Rekor transparency log entries"
 authors = [
-    {name = "Your Name",email = "you@example.com"}
+    {name = "Dina Himed"}
 ]
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.14"
 dependencies = [
     "requests (>=2.34.2,<3.0.0)",
     "cryptography (>=50.0.2,<51.0.0)"
 ]
 
+[project.urls]
+Repository = "https://github.com/dh2591/sscs-assignment1-sigstore-and-intoto"
+
+[tool.poetry]
+packages = [{include = "rekor_monitor"}]
+exclude = ["tests", "tests/**"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -24,5 +32,6 @@ dev = [
     "bandit (>=1.9.4,<2.0.0)",
     "pytest (>=9.1.1,<10.0.0)",
     "pre-commit (>=4.7.0,<5.0.0)",
-    "pytest-cov (>=7.1.0,<8.0.0)"
+    "pytest-cov (>=7.1.0,<8.0.0)",
+    "cyclonedx-bom (>=9.0.0,<10.0.0) ; python_version >= \"3.14\" and python_version < \"4\""
 ]

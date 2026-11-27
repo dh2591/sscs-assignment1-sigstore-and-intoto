@@ -4,7 +4,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from main import (
+from rekor_monitor.main import (
     get_log_entry,
     get_verification_proof,
     get_latest_checkpoint,
@@ -22,7 +22,7 @@ def test_get_log_entry_success():
     # Simulate a successful response from Rekor.
     fake_entry = {"body": "example"}
 
-    with patch("main.requests.get") as mock_get:
+    with patch("rekor_monitor.main.requests.get") as mock_get:
         mock_response = Mock()
         mock_response.json.return_value = {"fake-uuid": fake_entry}
         mock_get.return_value = mock_response
@@ -35,7 +35,7 @@ def test_get_log_entry_success():
 
 def test_get_log_entry_empty_response():
     # Rekor returning no entries should raise an error.
-    with patch("main.requests.get") as mock_get:
+    with patch("rekor_monitor.main.requests.get") as mock_get:
         mock_get.return_value.json.return_value = {}
 
         with pytest.raises(ValueError, match="No Rekor entry found"):
@@ -47,7 +47,7 @@ def test_get_verification_proof_success():
     fake_proof = {"logIndex": 123, "hashes": []}
     fake_entry = {"verification": {"inclusionProof": fake_proof}}
 
-    with patch("main.get_log_entry", return_value=fake_entry):
+    with patch("rekor_monitor.main.get_log_entry", return_value=fake_entry):
         result = get_verification_proof(123)
 
         assert result == fake_proof
@@ -55,7 +55,7 @@ def test_get_verification_proof_success():
 
 def test_get_verification_proof_missing():
     # An entry without an inclusion proof should raise an error.
-    with patch("main.get_log_entry", return_value={}):
+    with patch("rekor_monitor.main.get_log_entry", return_value={}):
         with pytest.raises(ValueError, match="No inclusion proof"):
             get_verification_proof(123)
 
@@ -68,7 +68,7 @@ def test_get_latest_checkpoint():
         "rootHash": "example-hash",
     }
 
-    with patch("main.requests.get") as mock_get:
+    with patch("rekor_monitor.main.requests.get") as mock_get:
         mock_response = Mock()
         mock_response.json.return_value = fake_checkpoint
         mock_get.return_value = mock_response
@@ -99,7 +99,7 @@ def test_consistency_different_tree_ids():
         "rootHash": "new-hash",
     }
 
-    with patch("main.get_latest_checkpoint", return_value=new_checkpoint):
+    with patch("rekor_monitor.main.get_latest_checkpoint", return_value=new_checkpoint):
         with pytest.raises(ValueError, match="Tree IDs do not match"):
             consistency(old_checkpoint)
 
@@ -118,7 +118,7 @@ def test_consistency_invalid_tree_size():
         "rootHash": "new-hash",
     }
 
-    with patch("main.get_latest_checkpoint", return_value=new_checkpoint):
+    with patch("rekor_monitor.main.get_latest_checkpoint", return_value=new_checkpoint):
         with pytest.raises(ValueError, match="smaller tree size"):
             consistency(old_checkpoint)
 
@@ -154,13 +154,13 @@ def test_inclusion_success(tmp_path, capsys):
     }
 
     # Simulate verification without contacting Rekor.
-    with patch("main.get_log_entry", return_value=fake_entry), \
-         patch("main.get_verification_proof", return_value=fake_proof), \
-         patch("main.extract_public_key", return_value=b"fake-public-key"), \
-         patch("main.verify_artifact_signature") as mock_signature, \
-         patch("main.verify_inclusion") as mock_inclusion:
+    with patch("rekor_monitor.main.get_log_entry", return_value=fake_entry), \
+         patch("rekor_monitor.main.get_verification_proof", return_value=fake_proof), \
+         patch("rekor_monitor.main.extract_public_key", return_value=b"fake-public-key"), \
+         patch("rekor_monitor.main.verify_artifact_signature") as mock_signature, \
+         patch("rekor_monitor.main.verify_inclusion") as mock_inclusion:
 
-        from main import inclusion
+        from rekor_monitor.main import inclusion
 
         inclusion(123, str(artifact))
 
@@ -172,7 +172,7 @@ def test_inclusion_success(tmp_path, capsys):
 
 def test_inclusion_missing_artifact():
     # Reject an empty artifact filepath.
-    from main import inclusion
+    from rekor_monitor.main import inclusion
 
     with pytest.raises(ValueError):
         inclusion(123, "")
@@ -180,7 +180,7 @@ def test_inclusion_missing_artifact():
 
 def test_inclusion_nonexistent_file(tmp_path):
     # Reject a filepath that does not exist.
-    from main import inclusion
+    from rekor_monitor.main import inclusion
 
     missing_file = tmp_path / "missing.txt"
 
@@ -190,7 +190,7 @@ def test_inclusion_nonexistent_file(tmp_path):
 
 def test_inclusion_invalid_index():
     # Reject a negative log index.
-    from main import inclusion
+    from rekor_monitor.main import inclusion
 
     with pytest.raises(ValueError):
         inclusion(-1, "artifact.txt")
@@ -216,9 +216,9 @@ def test_consistency_success(capsys):
         "hashes": ["fake-hash"]
     }
 
-    with patch("main.get_latest_checkpoint", return_value=new_checkpoint), \
-         patch("main.requests.get") as mock_get, \
-         patch("main.verify_consistency") as mock_verify:
+    with patch("rekor_monitor.main.get_latest_checkpoint", return_value=new_checkpoint), \
+         patch("rekor_monitor.main.requests.get") as mock_get, \
+         patch("rekor_monitor.main.verify_consistency") as mock_verify:
 
         mock_response = Mock()
         mock_response.json.return_value = fake_proof

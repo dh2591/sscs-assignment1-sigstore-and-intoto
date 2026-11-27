@@ -4,7 +4,7 @@ import hashlib
 
 import pytest
 
-from merkle_proof import compute_leaf_hash, decomp_incl_proof
+from rekor_monitor.merkle_proof import compute_leaf_hash, decomp_incl_proof
 
 
 # Test the function with different valid inputs
@@ -40,14 +40,14 @@ def test_compute_leaf_hash():
 
 def test_hasher_size():
     # SHA-256 produces a 32-byte hash.
-    from merkle_proof import DefaultHasher
+    from rekor_monitor.merkle_proof import DefaultHasher
 
     assert DefaultHasher.size() == 32
 
 
 def test_empty_root():
     # The empty root should be the SHA-256 hash of empty data.
-    from merkle_proof import DefaultHasher
+    from rekor_monitor.merkle_proof import DefaultHasher
 
     expected = hashlib.sha256(b"").digest()
     assert DefaultHasher.empty_root() == expected
@@ -55,7 +55,7 @@ def test_empty_root():
 
 def test_hash_leaf():
     # A leaf hash starts with a 0 byte, followed by the data.
-    from merkle_proof import DefaultHasher
+    from rekor_monitor.merkle_proof import DefaultHasher
 
     expected = hashlib.sha256(b"\x00hello").digest()
     assert DefaultHasher.hash_leaf(b"hello") == expected
@@ -63,7 +63,7 @@ def test_hash_leaf():
 
 def test_hash_children():
     # A parent hash starts with a 1 byte and combines two hashes.
-    from merkle_proof import DefaultHasher
+    from rekor_monitor.merkle_proof import DefaultHasher
 
     left = DefaultHasher.hash_leaf(b"left")
     right = DefaultHasher.hash_leaf(b"right")
@@ -74,14 +74,14 @@ def test_hash_children():
 
 def test_verify_match_success():
     # Matching hashes should not raise an exception.
-    from merkle_proof import verify_match
+    from rekor_monitor.merkle_proof import verify_match
 
     verify_match(b"same", b"same")
 
 
 def test_verify_match_failure():
     # Different hashes should raise RootMismatchError.
-    from merkle_proof import RootMismatchError, verify_match
+    from rekor_monitor.merkle_proof import RootMismatchError, verify_match
 
     with pytest.raises(RootMismatchError):
         verify_match(b"first", b"second")
@@ -89,7 +89,7 @@ def test_verify_match_failure():
 
 def test_inner_proof_size():
     # Check the expected inner proof size.
-    from merkle_proof import inner_proof_size
+    from rekor_monitor.merkle_proof import inner_proof_size
 
     assert inner_proof_size(0, 1) == 0
     assert inner_proof_size(0, 2) == 1
@@ -97,7 +97,7 @@ def test_inner_proof_size():
 
 def test_root_from_inclusion_proof():
     # A tree containing one leaf has that leaf's hash as its root.
-    from merkle_proof import DefaultHasher, root_from_inclusion_proof
+    from rekor_monitor.merkle_proof import DefaultHasher, root_from_inclusion_proof
 
     leaf_hash = DefaultHasher.hash_leaf(b"hello")
 
@@ -110,7 +110,7 @@ def test_root_from_inclusion_proof():
 
 def test_invalid_inclusion_index():
     # An index outside the tree should raise ValueError.
-    from merkle_proof import DefaultHasher, root_from_inclusion_proof
+    from rekor_monitor.merkle_proof import DefaultHasher, root_from_inclusion_proof
 
     leaf_hash = DefaultHasher.hash_leaf(b"hello")
 
@@ -122,7 +122,7 @@ def test_invalid_inclusion_index():
 
 def test_verify_consistency_same_tree():
     # Identical tree sizes and root hashes are consistent.
-    from merkle_proof import DefaultHasher, verify_consistency
+    from rekor_monitor.merkle_proof import DefaultHasher, verify_consistency
 
     root = DefaultHasher.hash_leaf(b"hello").hex()
 
@@ -131,7 +131,7 @@ def test_verify_consistency_same_tree():
 
 def test_verify_consistency_different_roots():
     # Identical tree sizes must have matching root hashes.
-    from merkle_proof import (
+    from rekor_monitor.merkle_proof import (
         DefaultHasher,
         RootMismatchError,
         verify_consistency,
@@ -146,7 +146,7 @@ def test_verify_consistency_different_roots():
 
 def test_verify_consistency_invalid_tree_size():
     # The newer tree cannot be smaller than the older tree.
-    from merkle_proof import DefaultHasher, verify_consistency
+    from rekor_monitor.merkle_proof import DefaultHasher, verify_consistency
 
     root = DefaultHasher.hash_leaf(b"hello").hex()
 
@@ -156,7 +156,7 @@ def test_verify_consistency_invalid_tree_size():
 
 def test_verify_consistency_empty_tree():
     # An empty tree can grow into a nonempty tree.
-    from merkle_proof import DefaultHasher, verify_consistency
+    from rekor_monitor.merkle_proof import DefaultHasher, verify_consistency
 
     empty_root = DefaultHasher.empty_root().hex()
     new_root = DefaultHasher.hash_leaf(b"hello").hex()
@@ -166,7 +166,7 @@ def test_verify_consistency_empty_tree():
 
 def test_verify_inclusion_single_leaf():
     # A single-leaf tree needs no additional proof hashes.
-    from merkle_proof import DefaultHasher, verify_inclusion
+    from rekor_monitor.merkle_proof import DefaultHasher, verify_inclusion
 
     leaf_hash = DefaultHasher.hash_leaf(b"hello").hex()
 
@@ -182,7 +182,7 @@ def test_verify_inclusion_single_leaf():
 
 def test_chain_inner_left():
     # Combine a leaf hash with a sibling on its right.
-    from merkle_proof import DefaultHasher, chain_inner
+    from rekor_monitor.merkle_proof import DefaultHasher, chain_inner
 
     leaf = DefaultHasher.hash_leaf(b"left")
     sibling = DefaultHasher.hash_leaf(b"right")
@@ -194,7 +194,7 @@ def test_chain_inner_left():
 
 def test_chain_inner_right():
     # Combine a sibling on the left with our leaf on the right.
-    from merkle_proof import DefaultHasher, chain_inner
+    from rekor_monitor.merkle_proof import DefaultHasher, chain_inner
 
     sibling = DefaultHasher.hash_leaf(b"left")
     leaf = DefaultHasher.hash_leaf(b"right")
@@ -206,7 +206,7 @@ def test_chain_inner_right():
 
 def test_chain_inner_right_only():
     # Verify a right-side hash in the inner proof.
-    from merkle_proof import DefaultHasher, chain_inner_right
+    from rekor_monitor.merkle_proof import DefaultHasher, chain_inner_right
 
     sibling = DefaultHasher.hash_leaf(b"left")
     leaf = DefaultHasher.hash_leaf(b"right")
@@ -219,7 +219,7 @@ def test_chain_inner_right_only():
 
 def test_chain_border_right():
     # Combine a hash with another hash along the tree border.
-    from merkle_proof import DefaultHasher, chain_border_right
+    from rekor_monitor.merkle_proof import DefaultHasher, chain_border_right
 
     left = DefaultHasher.hash_leaf(b"left")
     right = DefaultHasher.hash_leaf(b"right")
@@ -233,7 +233,7 @@ def test_chain_border_right():
 
 def test_invalid_leaf_hash_size():
     # Reject leaf hashes that are not the correct length.
-    from merkle_proof import DefaultHasher, root_from_inclusion_proof
+    from rekor_monitor.merkle_proof import DefaultHasher, root_from_inclusion_proof
 
     with pytest.raises(ValueError, match="unexpected size"):
         root_from_inclusion_proof(
@@ -247,7 +247,7 @@ def test_invalid_leaf_hash_size():
 
 def test_verify_inclusion_debug(capsys):
     # Check that debug mode prints the calculated and expected root hashes.
-    from merkle_proof import DefaultHasher, verify_inclusion
+    from rekor_monitor.merkle_proof import DefaultHasher, verify_inclusion
 
     leaf_hash = DefaultHasher.hash_leaf(b"hello").hex()
 
